@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ps" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatGPT ضد ته</title>
+<style>
+:root{--bg:#0a0e1f;--ink:#eef0ff;--muted:#9aa3c7;--glass:rgba(255,255,255,.07);--bd:rgba(255,255,255,.14);
+--user:#22d3ee;--gpt:#ff5f7e;--gold:#ffd166;--ok:#34e0a1;--bad:#ff5f7e;--vio:#8b5cf6}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{font-family:"Noto Naskh Arabic","Noto Sans Arabic",Tahoma,"Segoe UI",Arial,sans-serif;color:var(--ink);line-height:1.75;background:var(--bg);
+padding:max(14px,env(safe-area-inset-top)) 14px max(24px,env(safe-area-inset-bottom));position:relative;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:70vmax;height:70vmax;border-radius:50%;filter:blur(90px);opacity:.45;z-index:-1}
+body::before{background:#7c3aed;top:-35vmax;right:-25vmax}
+body::after{background:#0ea5c6;bottom:-40vmax;left:-30vmax;opacity:.35}
+.wrap{max-width:640px;margin:0 auto}
+h1{text-align:center;font-size:clamp(1.6rem,6.5vw,2.3rem);margin:6px 0 0;background:linear-gradient(90deg,var(--user),#c4b5fd,var(--gpt));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);text-align:center;margin-bottom:16px}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border-radius:24px;padding:14px 10px;text-align:center;border:1px solid var(--bd);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.tile.u{box-shadow:0 0 30px -8px var(--user),inset 0 1px 0 rgba(255,255,255,.15)}
+.tile.g{box-shadow:0 0 30px -8px var(--gpt),inset 0 1px 0 rgba(255,255,255,.15)}
+.tile b{display:block;font-size:2.8rem;line-height:1.1;font-weight:800}
+.tile.u b{color:var(--user)}.tile.g b{color:var(--gpt)}
+.tile span{font-size:.95rem;color:var(--muted)}
+.pop{animation:pop .5s}
+@keyframes pop{40%{transform:scale(1.1)}}
+.panel{background:var(--glass);border:1px solid var(--bd);border-radius:26px;padding:18px;margin-top:14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.92rem;color:var(--muted)}
+.stats b{color:var(--ink)}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0 8px}
+.dot{height:8px;border-radius:8px;background:rgba(255,255,255,.14)}
+.dot.now{background:var(--gold);box-shadow:0 0 10px var(--gold)}.dot.ok{background:var(--ok)}.dot.no{background:var(--bad)}
+.bar{height:5px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--user),var(--vio),var(--gpt));transition:width .5s}
+.cat{display:inline-block;color:#0a0e1f;border-radius:999px;padding:2px 16px;font-weight:800;margin-bottom:12px}
+.q{font-size:1.35rem;font-weight:700;line-height:1.9}
+.hint{color:var(--muted);font-size:.9rem;margin-top:4px}
+.row{display:flex;gap:10px;margin-top:16px}
+input{flex:1;min-width:0;font:inherit;font-size:1.1rem;padding:13px 16px;border:1px solid var(--bd);border-radius:16px;color:var(--ink);background:rgba(0,0,0,.3)}
+input::placeholder{color:var(--muted)}
+input:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+button{font:inherit;font-weight:800;font-size:1.05rem;color:#fff;border:0;border-radius:16px;padding:13px 22px;cursor:pointer;background:linear-gradient(135deg,var(--vio),#06b6d4);box-shadow:0 8px 24px -8px #6d4cff;transition:transform .15s}
+button:hover{transform:translateY(-2px)}button:active{transform:scale(.97)}
+button:disabled{opacity:.5;cursor:default;transform:none}
+.fb{margin-top:16px;border-radius:16px;padding:12px 16px;font-weight:700;border:1px solid}
+.fb.ok{background:rgba(52,224,161,.12);color:var(--ok);border-color:rgba(52,224,161,.4)}
+.fb.no{background:rgba(255,95,126,.12);color:#ff9bb0;border-color:rgba(255,95,126,.4)}
+.fb small{display:block;font-weight:400;color:var(--ink)}
+.hide{display:none!important}
+.final{text-align:center}
+.crown{font-size:4rem;line-height:1.2}
+.title{font-size:1.8rem;font-weight:800}
+.badge{display:inline-block;margin:8px 0;background:linear-gradient(90deg,var(--gold),#ff9f6b);color:#3b1d00;border-radius:999px;padding:4px 20px;font-weight:800}
+.scroll{overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:540px;font-size:.86rem}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:center}
+th{background:rgba(255,255,255,.08)}
+td.l{text-align:right}
+.verify{margin-top:10px;font-size:.88rem;color:var(--muted)}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="wrap">
+  <h1>🎮 ChatGPT ضد ته</h1>
+  <p class="sub">🎤 ۱۰ پړاوونه، ټولې پوښتنې د تاته دي!</p>
+
+  <div class="score" aria-live="polite">
+    <div class="tile u" id="tu"><span>🔵 ته</span><b id="su">0</b><span>نمرې</span></div>
+    <div class="tile g" id="tg"><span>🔴 ChatGPT</span><b id="sg">0</b><span>نمرې</span></div>
+  </div>
+
+  <div class="panel">
+    <div class="stats">
+      <span>🎮 پړاو: <b id="rd">0</b> / 10</span>
+      <span>✅ سم: <b id="cc">0</b></span>
+      <span>❌ ناسم: <b id="ic">0</b></span>
+      <span>📈 پرمختګ: <b id="pg">0</b>%</span>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+
+  <div class="panel" id="game">
+    <span class="cat" id="cat"></span>
+    <div class="q" id="q"></div>
+    <div class="hint" id="hint"></div>
+    <div class="row" id="ansRow">
+      <input id="ans" type="text" autocomplete="off" placeholder="خپل ځواب ولیکئ…" aria-label="ځواب">
+      <button id="go">ځواب ولیږه</button>
+    </div>
+    <div class="fb hide" id="fb"></div>
+    <div class="row hide" id="nextRow"><button id="next" style="flex:1">راتلونکی پړاو</button></div>
+  </div>
+
+  <div class="panel final hide" id="final">
+    <div class="crown" id="crown"></div>
+    <div class="title" id="win"></div>
+    <div class="badge" id="champ"></div>
+    <p id="fsum"></p>
+    <div class="scroll"><table id="led"></table></div>
+    <p class="verify" id="ver"></p>
+    <div class="row"><button id="again" style="flex:1">🔁 لوبه بیا پیل کړه</button></div>
+  </div>
+</div>
+
+<script>
+const CATS=[
+{k:"🧠 مغزي معماګانې",c:"#ff9f6b",q:[
+ {t:"کوم شی هر څومره چې ډېر ترې وباسې، هغومره لوی کېږي؟",a:["سوری","کنده","څاه"]},
+ {t:"هغه څه شی دی چې پښې نه لري خو تل مخکې ځي؟",a:["وخت","ساعت"]},
+ {t:"هغه څه شی دی چې هر ځای ستا سره ځي، خو لاس ورته نه شې وررسولی؟",a:["سیوری","سیوری"]},
+ {t:"کوم شی ډېر خوري خو هېڅکله نه ماړېږي؟",a:["اور"]},
+ {t:"هغه څه شی دی چې تل راځي خو هېڅکله نه رسېږي؟",a:["سبا","سبا ورځ"]}]},
+{k:"🔢 ریاضي معماګانې",c:"#a78bfa",h:"یوازې عدد ولیکئ.",q:[
+ {t:"۱۲ ضرب ۸ څو کېږي؟",a:["96"]},
+ {t:"۱۰۰ منفي ۳۷ څو کېږي؟",a:["63"]},
+ {t:"۱۵ جمع ۲۷ څو کېږي؟",a:["42"]},
+ {t:"د ۸۱ جذر څو دی؟",a:["9","نهه"]},
+ {t:"که یو درجن ۱۲ وي، ۳ درجنه څو کېږي؟",a:["36"]}]},
+{k:"🌍 عمومي معلومات",c:"#22d3ee",q:[
+ {t:"ترټولو لوی سمندر کوم دی؟",a:["آرام","آرام سمندر","بحر آرام","pacific","پاسیفیک"]},
+ {t:"په یوه کال کې څو میاشتې شته؟",a:["12","دولس"]},
+ {t:"د افغانستان پلازمینه کومه ښار ده؟",a:["کابل","kabul"]},
+ {t:"کومه سیاره لمر ته تر ټولو نژدې ده؟",a:["عطارد","mercury","مرکوری"]},
+ {t:"اوبه په څو سانتي ګراد درجو کې په جوش راځي؟",a:["100","سل"]}]},
+{k:"🧩 منطقي ننګونې",c:"#34e0a1",q:[
+ {t:"ټولې ګلابې ګلونه دي او ټول ګلونه نباتات دي. ایا ګلاب نبات دی؟ (هو یا نه)",a:["هو","بلی"]},
+ {t:"په دې لړۍ کې راتلونکی عدد کوم دی؟ ۲، ۴، ۶، ۸، ؟",a:["10","لس"]},
+ {t:"که نن سه‌شنبه وي، پرون کومه ورځ وه؟",a:["دوشنبه"]},
+ {t:"راتلونکی عدد کوم دی؟ ۳، ۶، ۹، ۱۲، ؟",a:["15","پنځلس"]},
+ {t:"راتلونکی عدد کوم دی؟ ۱، ۴، ۹، ۱۶، ؟",a:["25"]}]},
+{k:"🔤 د کلمو لوبې",c:"#ff7eb6",q:[
+ {t:"د «کتاب» کلمه څو توري لري؟",a:["4","څلور"]},
+ {t:"د «مکتب» کلمې وروستی توری کوم دی؟",a:["ب"]},
+ {t:"د «قلم» کلمه څو توري لري؟",a:["3","درې"]},
+ {t:"د «پښتو» کلمې لومړی توری کوم دی؟",a:["پ"]},
+ {t:"د «لمر» کلمې وروستی توری کوم دی؟",a:["ر"]}]},
+{k:"🔍 پټې پوښتنې",c:"#ffd166",q:[
+ {t:"هغه څه شی دی چې ستا دی، خو نور خلک یې له تا ډېر کاروي؟",a:["نوم","ستا نوم"]},
+ {t:"کوم شی په ټوله نړۍ کې ګرځي، خو په یوه کونج کې پاتې کېږي؟",a:["ټیکټ","پوستي ټیکټ","تمبر","ټمبر"]},
+ {t:"هغه څه شی دی چې ماتېږي خو لاس ورته نه لګېږي؟",a:["ژمنه","چوپتیا"]},
+ {t:"کوم شی هر څومره چې وچ کړي، خپله لوند شي؟",a:["دسمال","تولیه"]},
+ {t:"هغه څه شی دی چې تل ستا مخکې دی خو نه یې لیدلی شې؟",a:["راتلونکی","آینده"]}]},
+{k:"🧠 د حافظې ننګونې",c:"#c084fc",q:[
+ {t:"دا رنګونه په یاد ولرئ: سور، شین، ژېړ. دویم رنګ کوم و؟",a:["شین"]},
+ {t:"دا کلمې په یاد ولرئ: ګل، کتاب، اوبه، لمر. دریمه کلمه کومه وه؟",a:["اوبه"]},
+ {t:"دا عددونه په یاد ولرئ: ۵، ۹، ۲، ۷. دریم عدد کوم و؟",a:["2","دوه"]},
+ {t:"دا میوې په یاد ولرئ: مڼه، انګور، انار. وروستۍ میوه کومه وه؟",a:["انار"]},
+ {t:"دا نومونه په یاد ولرئ: احمد، ګل، نور، سیمه. دویم نوم څه و؟",a:["ګل"]}]},
+{k:"⚡ چټک فکر",c:"#fbbf24",h:"چټک ځواب ورکړئ!",q:[
+ {t:"د ۹ او ۶ مجموعه څو ده؟",a:["15","پنځلس"]},
+ {t:"د «سهار» مخالف کوم وخت دی؟",a:["ماښام","شپه"]},
+ {t:"۷ ضرب ۶ څو کېږي؟",a:["42"]},
+ {t:"په افغانستان کې د اونۍ لومړۍ ورځ کومه ده؟",a:["شنبه"]},
+ {t:"د ۵۰ نیمایي څو دی؟",a:["25"]}]},
+{k:"🎯 اټکل لوبې",c:"#2dd4bf",q:[
+ {t:"زه لوړ ځناور یم، اوږده غاړه لرم او په افریقا کې ژوند کوم. څوک یم؟",a:["زرافه","giraffe"]},
+ {t:"زه ګرد او روښانه یم، په اسمان کې راڅرګندېږم او ورځ زما له امله روښانه وي. څه یم؟",a:["لمر"]},
+ {t:"زه سپینه او نرمه یم، په اسمان کې تیریږم او باران راوړم. څه یم؟",a:["وریځ","ورېځ"]},
+ {t:"زه د مرغانو پاچا یم او ډېر لوړ الوځم. څوک یم؟",a:["عقاب"]},
+ {t:"زه په شپه کې ښکارېږم، د ځمکې شاوخوا ګرځم او له لمر روښانه کېږم. څه یم؟",a:["سپوږمۍ","قمر","moon"]}]},
+{k:"🌎 جغرافیه",c:"#60a5fa",q:[
+ {t:"د نړۍ ترټولو لوړ غر کوم دی؟",a:["ایورست","اورست","ماونټ ایورست","everest"]},
+ {t:"د پاکستان پلازمینه کومه ښار دی؟",a:["اسلام اباد","islamabad"]},
+ {t:"د ایران پلازمینه کومه ښار دی؟",a:["تهران","tehran"]},
+ {t:"کوم اوږد سیند د مصر له لارې تیریږي؟",a:["نیل","نیل سیند","nile"]},
+ {t:"د هند پلازمینه کومه ښار دی؟",a:["دهلی","نوی دهلی","delhi"]}]}
+];
+
+const $=id=>document.getElementById(id);
+let ledger=[],cur=0,Q=[],locked=false;
+
+function norm(s){
+  const dg="۰۱۲۳۴۵۶۷۸۹",ar="٠١٢٣٤٥٦٧٨٩";
+  return String(s).toLowerCase()
+   .replace(/[۰-۹]/g,d=>dg.indexOf(d)).replace(/[٠-٩]/g,d=>ar.indexOf(d))
+   .replace(/[\u064B-\u065F\u0670\u200c\u200d]/g,"")
+   .replace(/[يىېۍئ]/g,"ی").replace(/ك/g,"ک").replace(/[ۀہة]/g,"ه").replace(/آ/g,"ا")
+   .replace(/ټ/g,"ت").replace(/ډ/g,"د").replace(/ړ/g,"ر").replace(/ڼ/g,"ن").replace(/گ/g,"ګ")
+   .replace(/^(ده|دا|هغه)\s+/,"")
+   .replace(/[\s.,،؟?!«»"'()\-_]/g,"");
+}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function scores(){
+  const ok=ledger.filter(r=>r.ok).length,no=ledger.length-ok;
+  return {u:ok*10,g:no*10,ok,no};
+}
+function render(){
+  const s=scores(),n=ledger.length;
+  $("su").textContent=s.u;$("sg").textContent=s.g;
+  $("rd").textContent=Math.min(n+1,10);
+  $("cc").textContent=s.ok;$("ic").textContent=s.no;
+  const pct=Math.round(n/10*100);$("pg").textContent=pct;$("bar").style.width=pct+"%";
+  $("dots").innerHTML=Array.from({length:10},(_,i)=>{
+    const r=ledger[i];return `<div class="dot ${r?(r.ok?"ok":"no"):(i===n?"now":"")}"></div>`}).join("");
+}
+function bump(id){const e=$(id);e.classList.remove("pop");void e.offsetWidth;e.classList.add("pop")}
+
+let memUsed={};
+function buildQ(){
+  let used=memUsed;
+  try{used=JSON.parse(localStorage.getItem("gs_used")||"null")||memUsed}catch(e){}
+  const out=CATS.map((c,ci)=>{
+    let u=used[ci]||[],av=c.q.map((_,i)=>i).filter(i=>!u.includes(i));
+    if(!av.length){u=[];av=c.q.map((_,i)=>i)}
+    const i=pick(av);used[ci]=u.concat(i);
+    return {cat:c,q:c.q[i]};
+  });
+  memUsed=used;
+  try{localStorage.setItem("gs_used",JSON.stringify(used))}catch(e){}
+  return shuffle(out);
+}
+function start(){
+  ledger=[];cur=0;locked=false;
+  Q=buildQ();
+  $("final").classList.add("hide");$("game").classList.remove("hide");
+  $("rd").textContent=1;
+  show();
+}
+function show(){
+  locked=false;
+  const {cat,q}=Q[cur];
+  $("cat").textContent=cat.k;$("cat").style.background=cat.c;
+  $("q").textContent=`پړاو ${cur+1}: ${q.t}`;
+  $("hint").textContent=cat.h||"";
+  $("ans").value="";$("ans").disabled=false;$("go").disabled=false;
+  $("fb").classList.add("hide");$("nextRow").classList.add("hide");$("ansRow").classList.remove("hide");
+  render();$("rd").textContent=cur+1;
+  $("ans").focus({preventScroll:true});
+}
+function submit(){
+  if(locked)return;
+  const raw=$("ans").value.trim();
+  if(!raw){$("ans").focus();$("ans").placeholder="مهرباني وکړئ لومړی ځواب ولیکئ";return}
+  locked=true;
+  const {cat,q}=Q[cur];
+  const ok=q.a.map(norm).includes(norm(raw));
+  ledger.push({n:cur+1,q:q.t,given:raw,correct:q.a[0],ok,u:ok?10:0,g:ok?0:10});
+  $("ans").disabled=true;$("go").disabled=true;
+  const fb=$("fb");fb.className="fb "+(ok?"ok":"no");
+  fb.innerHTML=ok
+    ?`✅ آفرین! سم ځواب! <small>۱۰ نمرې تاته. ځواب: ${esc(q.a[0])}</small>`
+    :`❌ ناسم ځواب. <small>۱۰ نمرې ChatGPT ته. سم ځواب: ${esc(q.a[0])}</small>`;
+  render();$("rd").textContent=cur+1;bump(ok?"tu":"tg");
+  if(ok)burst(60);
+  $("next").textContent=cur===9?"🏆 وروستۍ پایله":"راتلونکی پړاو";
+  $("nextRow").classList.remove("hide");$("next").focus({preventScroll:true});
+}
+function next(){
+  if(cur>=9){finish();return}
+  cur++;show();
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function finish(){
+  const s=scores();
+  const u=ledger.reduce((a,r)=>a+r.u,0),g=ledger.reduce((a,r)=>a+r.g,0);
+  const valid=u===s.u&&g===s.g&&u+g===100&&ledger.length===10;
+  $("game").classList.add("hide");$("final").classList.remove("hide");
+  let crown,win,champ;
+  if(u>g){crown="👑🎉";win="ته وګټله!";champ="🏅 د پوهې اتل"}
+  else if(g>u){crown="🤖🏆";win="ChatGPT وګټله!";champ="🏅 د ماشین پاچا"}
+  else{crown="🤝⭐";win="لوبه برابره شوه!";champ="🏅 د برابرۍ اتلان"}
+  $("crown").textContent=crown;$("win").textContent=win;$("champ").textContent=champ;
+  $("fsum").innerHTML=`🔵 ته: <b>${u}</b> نمرې &nbsp;|&nbsp; 🔴 ChatGPT: <b>${g}</b> نمرې`;
+  $("led").innerHTML=`<tr><th>پړاو</th><th>پوښتنه</th><th>ستا ځواب</th><th>سم ځواب</th><th>پایله</th><th>🔵</th><th>🔴</th></tr>`+
+   ledger.map(r=>`<tr><td>${r.n}</td><td class="l">${esc(r.q)}</td><td>${esc(r.given)}</td><td>${esc(r.correct)}</td><td>${r.ok?"✅":"❌"}</td><td>${r.u}</td><td>${r.g}</td></tr>`).join("")+
+   `<tr><th colspan="5">مجموعه</th><th>${u}</th><th>${g}</th></tr>`;
+  $("ver").textContent=valid?`✔ تایید شو: ${u} + ${g} = 100 (۱۰ پړاوونه × ۱۰ نمرې)`:"⚠ د نمرو تایید ناکام شو.";
+  render();$("rd").textContent=10;
+  if(u>=g)burst(220);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* confetti */
+const cv=$("fx"),cx=cv.getContext("2d");let P=[],raf=0;
+function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}
+addEventListener("resize",size);size();
+function burst(n){
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  const cols=["#ffc83d","#ff4fa3","#12b5e5","#1fc27d","#ffffff"],d=devicePixelRatio;
+  for(let i=0;i<n;i++)P.push({x:cv.width/2,y:cv.height*.3,vx:(Math.random()-.5)*14*d,vy:(-Math.random()*12-3)*d,
+    w:(5+Math.random()*6)*d,h:(8+Math.random()*8)*d,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:pick(cols),l:90+Math.random()*50});
+  if(!raf)loop();
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  P=P.filter(p=>p.l>0);
+  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.4*devicePixelRatio;p.r+=p.vr;p.l--;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()});
+  raf=P.length?requestAnimationFrame(loop):0;
+  if(!raf)cx.clearRect(0,0,cv.width,cv.height);
+}
+
+$("go").onclick=submit;
+$("ans").addEventListener("keydown",e=>{if(e.key==="Enter")submit()});
+$("next").onclick=next;
+$("again").onclick=start;
+start();
+</script>
+</body>
+</html>
